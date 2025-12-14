@@ -1,4 +1,4 @@
-import { validateProduct, validatePartialProduct } from '../schemas/movies.js'
+import { validateProduct, validatePartialProduct } from '../schemas/products.js'
 
 export class ProductController {
   constructor ({ productModel }) {
@@ -6,8 +6,7 @@ export class ProductController {
   }
 
   getAll = async (req, res) => {
-    const { category } = req.query
-    const products = await this.productModel.getAll({ category })
+    const products = await this.productModel.getAll()
     // Que es lo que renderiza
     res.json(products)
   }

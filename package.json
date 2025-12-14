@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Backend service for FoodTrack ecosystem",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,6 +16,9 @@
     "extends": "standard"
   },
   "dependencies": {
-    "dotenv": "^17.2.3"
+    "@xata.io/cli": "^0.16.12",
+    "@xata.io/client": "^0.30.1",
+    "dotenv": "17.2.3",
+    "express": "5.2.1"
   }
 }
