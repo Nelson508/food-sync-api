@@ -26,12 +26,12 @@ async function executeQuery (query, params = []) {
   return response.json()
 }
 
-export class ProductModel {
-  static async getAll ({ marca }) {
+export class SupermercadoModel {
+  static async getAll () {
     const query = `
-      SELECT * FROM productos WHERE marca = $1;
+      SELECT id, name FROM supermercados;
     `
-    const result = await executeQuery(query, [marca])
+    const result = await executeQuery(query)
 
     if (result.records.length === 0) return null
     return result.records

@@ -11,5 +11,6 @@ export const createProductRouter = ({ productModel }) => {
   productsRouter.post('/', productController.create)
   productsRouter.delete('/:id', productController.delete)
   productsRouter.patch('/:id', productController.update) */
+  //supermercados
   return productsRouter
 }
