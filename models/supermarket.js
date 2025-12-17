@@ -26,7 +26,7 @@ async function executeQuery (query, params = []) {
   return response.json()
 }
 
-export class SupermercadoModel {
+export class SupermarketModel {
   static async getAll () {
     const query = `
       SELECT id, name FROM supermercados;

@@ -5,9 +5,15 @@ export class ProductController {
     this.productModel = productModel
   }
 
-  getAll = async (req, res) => {
+  getAll = async (_req, res) => {
+    const products = await this.productModel.getAll()
+
+    res.json(products)
+  }
+
+  getAllMarca = async (req, res) => {
     const { marca } = req.query
-    const products = await this.productModel.getAll({ marca })
+    const products = await this.productModel.getAllMarca({ marca })
 
     res.json(products)
   }

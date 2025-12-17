@@ -1,5 +1,5 @@
 import { creatApp } from './app.js'
 import { ProductModel } from './models/product.js'
-import { SupermercadoModel } from './models/supermercado.js'
+import { SupermarketModel } from './models/supermarket.js'
 
-creatApp({ productModel: ProductModel, supermercadoModel: SupermercadoModel })
+creatApp({ productModel: ProductModel, supermarketModel: SupermarketModel })

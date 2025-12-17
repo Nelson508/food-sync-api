@@ -27,9 +27,21 @@ async function executeQuery (query, params = []) {
 }
 
 export class ProductModel {
-  static async getAll ({ marca }) {
+  static async getAll () {
     const query = `
-      SELECT * FROM productos WHERE marca = $1;
+      SELECT id, nombre, codigo_barra, imagen_url, detalle_nutricional, categoria_id, marca, url_producto
+      FROM productos;
+    `
+    const result = await executeQuery(query)
+
+    if (result.records.length === 0) return null
+    return result.records
+  }
+
+  static async getAllMarca ({ marca }) {
+    const query = `
+      SELECT id, nombre, codigo_barra, imagen_url, detalle_nutricional, categoria_id, marca, url_producto
+      FROM productos WHERE marca = $1;
     `
     const result = await executeQuery(query, [marca])
 

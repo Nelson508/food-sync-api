@@ -7,10 +7,10 @@ export const createProductRouter = ({ productModel }) => {
   const productController = new ProductController({ productModel })
 
   productsRouter.get('/', productController.getAll)
+  productsRouter.get('/', productController.getAllMarca)
   /*  productsRouter.get('/:id', productController.getById)
   productsRouter.post('/', productController.create)
   productsRouter.delete('/:id', productController.delete)
   productsRouter.patch('/:id', productController.update) */
-  //supermercados
   return productsRouter
 }

@@ -1,14 +1,14 @@
 import express, { json } from 'express' // require -> commonJS
 import { createProductRouter } from './routes/products.js'
-import { createSupermercadoRouter } from './routes/supermercados.js'
+import { createSupermarketRouter } from './routes/supermarkets.js'
 
-export const creatApp = ({ productModel, supermercadoModel }) => {
+export const creatApp = ({ productModel, supermarketModel }) => {
   const app = express()
   app.use(json())
   app.disable('x-powered-by') // deshabilitar el header X-Powered-By: Express
 
   app.use('/products', createProductRouter({ productModel }))
-  app.use('/supermercados', createSupermercadoRouter({ supermercadoModel }))
+  app.use('/supermarkets', createSupermarketRouter({ supermarketModel }))
 
   const PORT = process.env.PORT ?? 1234
 
