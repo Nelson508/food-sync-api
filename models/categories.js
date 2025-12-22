@@ -29,11 +29,35 @@ async function executeQuery (query, params = []) {
 export class CategoryModel {
   static async getAll () {
     const query = `
-      SELECT id, nombre, parent_id FROM categorias order by id ASC;
+      SELECT id, nombre, parent_id
+      FROM categorias
+      order by id ASC;
     `
     const result = await executeQuery(query)
 
-    if (result.records.length === 0) return null
+    return result.records
+  }
+
+  static async getRoots () {
+    const query = `
+      SELECT id, nombre, parent_id
+      FROM categorias
+      WHERE parent_id IS NULL
+      order by id ASC;
+    `
+    const result = await executeQuery(query)
+
+    return result.records
+  }
+
+  static async getByParentId ({ parentId }) {
+    const query = `
+      SELECT id, nombre, parent_id
+      FROM categorias
+      WHERE parent_id = $1;
+    `
+    const result = await executeQuery(query, [parentId])
+
     return result.records
   }
 }

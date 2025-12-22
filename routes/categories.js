@@ -7,5 +7,7 @@ export const createCategoryRouter = ({ categoryModel }) => {
   const categoryController = new CategoryController({ categoryModel })
 
   categoriesRouter.get('/', categoryController.getAll)
+  categoriesRouter.get('/roots', categoryController.getRoots)
+  categoriesRouter.get('/:parentId', categoryController.getByParentId)
   return categoriesRouter
 }
