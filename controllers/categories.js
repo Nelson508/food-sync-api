@@ -22,9 +22,6 @@ export class CategoryController {
 
   getTree = async (_req, res) => {
     const categories = await this.categoryModel.getAll()
-
-    // categories: [{id, nombre, parent_id}, ...]
-
     return res.json(buildCategoryTree(categories))
   }
 }
