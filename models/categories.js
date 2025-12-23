@@ -40,7 +40,7 @@ export class CategoryModel {
 
   static async getRoots () {
     const query = `
-      SELECT id, nombre, parent_id
+      SELECT id, nombre
       FROM categorias
       WHERE parent_id IS NULL
       order by id ASC;

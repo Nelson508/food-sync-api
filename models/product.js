@@ -48,4 +48,15 @@ export class ProductModel {
     if (result.records.length === 0) return null
     return result.records
   }
+
+  static async getByCategoryId ({ categoryId }) {
+    const query = `
+      SELECT id, nombre, codigo_barra, imagen_url, detalle_nutricional, categoria_id, marca, url_producto
+      FROM productos
+      WHERE categoria_id = $1;
+    `
+    const result = await executeQuery(query, [categoryId])
+
+    return result.records
+  }
 }

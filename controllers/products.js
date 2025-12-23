@@ -26,6 +26,12 @@ export class ProductController {
     res.status(404).json({ message: 'Product not found' })
   }
 
+  getByCategoryId = async (req, res) => {
+    const { categoryId } = req.params
+    const product = await this.productModel.getByCategoryId({ categoryId })
+    return res.json(product)
+  }
+
   create = async (req, res) => {
     const result = validateProduct(req.body)
 
