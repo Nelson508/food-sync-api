@@ -43,7 +43,7 @@ export class CategoryModel {
       SELECT id, nombre
       FROM categorias
       WHERE parent_id IS NULL
-      order by id ASC;
+      ORDER BY id ASC;
     `
     const result = await executeQuery(query)
 
@@ -55,6 +55,19 @@ export class CategoryModel {
       SELECT id, nombre, parent_id
       FROM categorias
       WHERE parent_id = $1;
+    `
+    const result = await executeQuery(query, [parentId])
+
+    return result.records
+  }
+
+  static async getGrandchildrenByParentId ({ parentId }) {
+    const query = `
+      SELECT g.id, g.nombre, g.parent_id
+      FROM categorias AS c
+      JOIN categorias AS g ON g.parent_id = c.id
+      WHERE c.parent_id = $1
+      ORDER BY g.id ASC;
     `
     const result = await executeQuery(query, [parentId])
 

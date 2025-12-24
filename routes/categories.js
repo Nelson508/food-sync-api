@@ -9,6 +9,7 @@ export const createCategoryRouter = ({ categoryModel }) => {
   categoriesRouter.get('/', categoryController.getAll)
   categoriesRouter.get('/roots', categoryController.getRoots)
   categoriesRouter.get('/tree', categoryController.getTree)
-  categoriesRouter.get('/parent/:parentId', categoryController.getByParentId)
+  categoriesRouter.get('/:parentId/parent', categoryController.getByParentId)
+  categoriesRouter.get('/:parentId/grandchildren', categoryController.getGrandchildrenByParentId)
   return categoriesRouter
 }

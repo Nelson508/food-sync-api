@@ -24,6 +24,13 @@ export class CategoryController {
     const categories = await this.categoryModel.getAll()
     return res.json(buildCategoryTree(categories))
   }
+
+  getGrandchildrenByParentId = async (req, res) => {
+    const { parentId } = req.params
+
+    const categories = await this.categoryModel.getGrandchildrenByParentId({ parentId })
+    return res.json(categories)
+  }
 }
 
 function normalizeParentId (value) {
