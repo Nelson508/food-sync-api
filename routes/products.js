@@ -9,9 +9,5 @@ export const createProductRouter = ({ productModel }) => {
   productsRouter.get('/', productController.getAll)
   productsRouter.get('/', productController.getAllMarca)
   productsRouter.get('/:categoryId/category', productController.getByCategoryId)
-  /*  productsRouter.get('/:id', productController.getById)
-  productsRouter.post('/', productController.create)
-  productsRouter.delete('/:id', productController.delete)
-  productsRouter.patch('/:id', productController.update) */
   return productsRouter
 }
