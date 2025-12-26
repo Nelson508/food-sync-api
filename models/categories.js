@@ -73,25 +73,4 @@ export class CategoryModel {
 
     return result.records
   }
-
-  static async getProductsByParentCategoryId ({ id }) {
-    const query = `
-      SELECT
-        p.id,
-        p.nombre,
-        p.codigo_barra,
-        p.imagen_url,
-        p.detalle_nutricional,
-        p.categoria_id,
-        p.marca,
-        p.url_producto
-      FROM categorias AS c
-      JOIN categorias AS g ON g.parent_id = c.id
-      JOIN productos  AS p ON p.categoria_id = g.id
-      WHERE c.parent_id = $1
-      ORDER BY p.nombre;
-    `
-    const result = await executeQuery(query, [id])
-    return result.records
-  }
 }

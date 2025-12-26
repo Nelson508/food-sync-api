@@ -5,17 +5,64 @@ export class ProductController {
     this.productModel = productModel
   }
 
-  getAll = async (_req, res) => {
-    const products = await this.productModel.getAll()
+  getProducts = async (req, res) => {
+    try {
+      const { marca, categoryId, categoryParentId, limit, offset } = req.query
 
-    res.json(products)
-  }
+      const filters = {
+        marca: marca?.trim() || null,
+        categoryId: categoryId?.trim() || null,
+        categoryParentId: categoryParentId?.trim() || null,
+        limit: limit ? Number(limit) : 10,
+        offset: offset ? Number(offset) : 0
+      }
 
-  getAllMarca = async (req, res) => {
-    const { marca } = req.query
-    const products = await this.productModel.getAllMarca({ marca })
+      if (!Number.isFinite(filters.limit) || filters.limit <= 0) {
+        return res.status(400).json({ message: 'limit inválido' })
+      }
+      if (!Number.isFinite(filters.offset) || filters.offset < 0) {
+        return res.status(400).json({ message: 'offset inválido' })
+      }
 
-    res.json(products)
+      let products
+
+      if (filters.categoryParentId) {
+        products = await this.productModel.getByCategoryParentId({
+          parentId: filters.categoryParentId,
+          marca: filters.marca,
+          limit: filters.limit,
+          offset: filters.offset
+        })
+        return res.json(products)
+      }
+
+      if (filters.categoryId) {
+        products = await this.productModel.getByCategoryId({
+          categoryId: filters.categoryId,
+          marca: filters.marca,
+          limit: filters.limit,
+          offset: filters.offset
+        })
+        return res.json(products)
+      }
+
+      if (filters.marca) {
+        products = await this.productModel.getByMarca({
+          marca: filters.marca,
+          limit: filters.limit,
+          offset: filters.offset
+        })
+        return res.json(products)
+      }
+
+      products = await this.productModel.getAll({
+        limit: filters.limit,
+        offset: filters.offset
+      })
+      return res.json(products)
+    } catch (e) {
+      return res.status(500).json({ message: 'Error fetching products' })
+    }
   }
 
   getById = async (req, res) => {

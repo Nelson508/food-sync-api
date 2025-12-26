@@ -11,6 +11,5 @@ export const createCategoryRouter = ({ categoryModel }) => {
   categoriesRouter.get('/tree', categoryController.getTree)
   categoriesRouter.get('/:parentId/parent', categoryController.getByParentId)
   categoriesRouter.get('/:parentId/grandchildren', categoryController.getGrandchildrenByParentId)
-  categoriesRouter.get('/:id/products', categoryController.getProductsByParentCategoryId)
   return categoriesRouter
 }

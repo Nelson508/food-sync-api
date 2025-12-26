@@ -6,8 +6,7 @@ export const createProductRouter = ({ productModel }) => {
 
   const productController = new ProductController({ productModel })
 
-  productsRouter.get('/', productController.getAll)
-  productsRouter.get('/', productController.getAllMarca)
-  productsRouter.get('/:categoryId/category', productController.getByCategoryId)
+  productsRouter.get('/', productController.getProducts)
+  productsRouter.get('?categoryParentId=5', productController.getByCategoryId)
   return productsRouter
 }
