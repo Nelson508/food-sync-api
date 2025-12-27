@@ -29,7 +29,6 @@ export class ProductController {
       if (filters.categoryParentId) {
         products = await this.productModel.getByCategoryParentId({
           parentId: filters.categoryParentId,
-          marca: filters.marca,
           limit: filters.limit,
           offset: filters.offset
         })
@@ -39,7 +38,6 @@ export class ProductController {
       if (filters.categoryId) {
         products = await this.productModel.getByCategoryId({
           categoryId: filters.categoryId,
-          marca: filters.marca,
           limit: filters.limit,
           offset: filters.offset
         })
@@ -63,20 +61,6 @@ export class ProductController {
     } catch (e) {
       return res.status(500).json({ message: 'Error fetching products' })
     }
-  }
-
-  getById = async (req, res) => {
-    const { id } = req.params
-    const product = await this.productModel.getById({ id })
-    if (product) return res.json(product)
-
-    res.status(404).json({ message: 'Product not found' })
-  }
-
-  getByCategoryId = async (req, res) => {
-    const { categoryId } = req.params
-    const product = await this.productModel.getByCategoryId({ categoryId })
-    return res.json(product)
   }
 
   create = async (req, res) => {
