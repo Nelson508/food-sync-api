@@ -7,57 +7,33 @@ export class ProductController {
 
   getProducts = async (req, res) => {
     try {
-      const { marca, categoryId, categoryParentId, limit, offset } = req.query
+      const { categoryId, categoryChildOf, categoryParentId, marca, limit, offset } = req.query
 
-      const filters = {
-        marca: marca?.trim() || null,
-        categoryId: categoryId?.trim() || null,
-        categoryParentId: categoryParentId?.trim() || null,
-        limit: limit ? Number(limit) : 10,
-        offset: offset ? Number(offset) : 0
+      const used = [categoryId, categoryChildOf, categoryParentId].filter(v => v !== undefined && String(v).trim() !== '').length
+      if (used > 1) {
+        return res.status(400).json({ message: 'Usa solo uno: categoryId, categoryChildOf o categoryParentId' })
       }
 
-      if (!Number.isFinite(filters.limit) || filters.limit <= 0) {
-        return res.status(400).json({ message: 'limit inválido' })
-      }
-      if (!Number.isFinite(filters.offset) || filters.offset < 0) {
-        return res.status(400).json({ message: 'offset inválido' })
-      }
+      const lim = limit ? Number(limit) : 50
+      const off = offset ? Number(offset) : 0
 
-      let products
-
-      if (filters.categoryParentId) {
-        products = await this.productModel.getByCategoryParentId({
-          parentId: filters.categoryParentId,
-          limit: filters.limit,
-          offset: filters.offset
-        })
-        return res.json(products)
+      if (categoryParentId) {
+        return res.json(await this.productModel.getByCategoryGrandchildrenOf({ parentId: String(categoryParentId).trim(), marca, limit: lim, offset: off }))
       }
 
-      if (filters.categoryId) {
-        products = await this.productModel.getByCategoryId({
-          categoryId: filters.categoryId,
-          limit: filters.limit,
-          offset: filters.offset
-        })
-        return res.json(products)
+      if (categoryChildOf) {
+        return res.json(await this.productModel.getByCategoryChildrenOf({ parentId: String(categoryChildOf).trim(), marca, limit: lim, offset: off }))
       }
 
-      if (filters.marca) {
-        products = await this.productModel.getByMarca({
-          marca: filters.marca,
-          limit: filters.limit,
-          offset: filters.offset
-        })
-        return res.json(products)
+      if (categoryId) {
+        return res.json(await this.productModel.getByCategoryId({ categoryId: String(categoryId).trim(), marca, limit: lim, offset: off }))
       }
 
-      products = await this.productModel.getAll({
-        limit: filters.limit,
-        offset: filters.offset
-      })
-      return res.json(products)
+      if (marca) {
+        return res.json(await this.productModel.getByMarca({ marca: String(marca).trim(), limit: lim, offset: off }))
+      }
+
+      return res.json(await this.productModel.getAll({ limit: lim, offset: off }))
     } catch (e) {
       return res.status(500).json({ message: 'Error fetching products' })
     }

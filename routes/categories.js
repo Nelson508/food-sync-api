@@ -6,10 +6,8 @@ export const createCategoryRouter = ({ categoryModel }) => {
 
   const categoryController = new CategoryController({ categoryModel })
 
-  categoriesRouter.get('/', categoryController.getAll)
+  categoriesRouter.get('/', categoryController.getCategories)
   categoriesRouter.get('/roots', categoryController.getRoots)
   categoriesRouter.get('/tree', categoryController.getTree)
-  categoriesRouter.get('/:parentId/parent', categoryController.getByParentId)
-  categoriesRouter.get('/:parentId/grandchildren', categoryController.getGrandchildrenByParentId)
   return categoriesRouter
 }

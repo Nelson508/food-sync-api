@@ -69,6 +69,28 @@ export class ProductModel {
     return result.records
   }
 
+  static async getByCategoryChildOf ({ parentId, limit, offset }) {
+    const query = `
+      SELECT
+        p.id,
+        p.nombre,
+        p.codigo_barra,
+        p.imagen_url,
+        p.detalle_nutricional,
+        p.categoria_id,
+        p.marca,
+        p.url_producto
+      FROM categorias AS c
+      JOIN productos  AS p ON p.categoria_id = c.id
+      WHERE c.parent_id = $1
+      ORDER BY p.nombre
+      LIMIT $2 OFFSET $3;
+    `
+    const result = await executeQuery(query, [parentId, limit, offset])
+
+    return result.records
+  }
+
   static async getByCategoryParentId ({ parentId, limit, offset }) {
     const query = `
       SELECT

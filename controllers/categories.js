@@ -3,33 +3,55 @@ export class CategoryController {
     this.categoryModel = categoryModel
   }
 
-  getAll = async (_req, res) => {
-    const categories = await this.categoryModel.getAll()
-    res.json(categories)
+  getCategories = async (req, res) => {
+    try {
+      const { parentId, grandchildrenOf } = req.query
+
+      const hasParentId = parentId !== undefined && String(parentId).trim() !== ''
+      const hasGrandchildren = grandchildrenOf !== undefined && String(grandchildrenOf).trim() !== ''
+
+      // No permitimos ambos a la vez (para que sea claro)
+      if (hasParentId && hasGrandchildren) {
+        return res.status(400).json({ message: 'Usa solo uno: parentId o grandchildrenOf' })
+      }
+
+      if (hasParentId) {
+        const categories = await this.categoryModel.getByParentId({
+          parentId: String(parentId).trim()
+        })
+        return res.json(categories)
+      }
+
+      if (hasGrandchildren) {
+        const categories = await this.categoryModel.getGrandchildrenByParentId({
+          parentId: String(grandchildrenOf).trim()
+        })
+        return res.json(categories)
+      }
+
+      const categories = await this.categoryModel.getAll()
+      return res.json(categories)
+    } catch (e) {
+      return res.status(500).json({ message: 'Error fetching categories' })
+    }
   }
 
   getRoots = async (_req, res) => {
-    const categories = await this.categoryModel.getRoots()
-    res.json(categories)
-  }
-
-  getByParentId = async (req, res) => {
-    const { parentId } = req.params
-
-    const categories = await this.categoryModel.getByParentId({ parentId })
-    return res.json(categories)
+    try {
+      const categories = await this.categoryModel.getRoots()
+      return res.json(categories)
+    } catch (e) {
+      return res.status(500).json({ message: 'Error fetching root categories' })
+    }
   }
 
   getTree = async (_req, res) => {
-    const categories = await this.categoryModel.getAll()
-    return res.json(buildCategoryTree(categories))
-  }
-
-  getGrandchildrenByParentId = async (req, res) => {
-    const { parentId } = req.params
-
-    const categories = await this.categoryModel.getGrandchildrenByParentId({ parentId })
-    return res.json(categories)
+    try {
+      const categories = await this.categoryModel.getAll()
+      return res.json(buildCategoryTree(categories))
+    } catch (e) {
+      return res.status(500).json({ message: 'Error building category tree' })
+    }
   }
 }
 
@@ -46,7 +68,6 @@ function buildCategoryTree (categories) {
   const byId = new Map()
   const roots = []
 
-  // 1) Crear nodos
   for (const c of categories) {
     const id = String(c.id).trim()
     byId.set(id, {
@@ -56,7 +77,6 @@ function buildCategoryTree (categories) {
     })
   }
 
-  // 2) Conectar padres/hijos
   for (const c of categories) {
     const id = String(c.id).trim()
     const node = byId.get(id)
@@ -68,7 +88,7 @@ function buildCategoryTree (categories) {
     } else {
       const parent = byId.get(parentId)
       if (parent) parent.children.push(node)
-      else roots.push(node) // huérfano => lo dejamos como root para no perderlo
+      else roots.push(node)
     }
   }
 
