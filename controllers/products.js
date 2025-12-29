@@ -7,22 +7,43 @@ export class ProductController {
 
   getProducts = async (req, res) => {
     try {
-      const { categoryId, categoryChildOf, categoryParentId, marca, limit, offset } = req.query
+      const { categoryId, categoryChildOf, categoryParentId, marca, q, limit, offset } = req.query
 
-      const used = [categoryId, categoryChildOf, categoryParentId].filter(v => v !== undefined && String(v).trim() !== '').length
+      const used = [categoryId, categoryChildOf, categoryParentId]
+        .filter(v => v !== undefined && String(v).trim() !== '').length
+
       if (used > 1) {
         return res.status(400).json({ message: 'Usa solo uno: categoryId, categoryChildOf o categoryParentId' })
       }
 
       const lim = limit ? Number(limit) : 50
       const off = offset ? Number(offset) : 0
+      const query = q ? String(q).trim() : null
 
+      // ✅ Si hay query, usa búsqueda dentro del scope que corresponda
+      if (query) {
+        if (categoryParentId) {
+          return res.json(await this.productModel.searchByCategoryParentId({ parentId: String(categoryParentId).trim(), marca, q: query, limit: lim, offset: off }))
+        }
+        if (categoryChildOf) {
+          return res.json(await this.productModel.searchByCategoryChildOf({ parentId: String(categoryChildOf).trim(), marca, q: query, limit: lim, offset: off }))
+        }
+        if (categoryId) {
+          return res.json(await this.productModel.searchByCategoryId({ categoryId: String(categoryId).trim(), marca, q: query, limit: lim, offset: off }))
+        }
+        if (marca) {
+          return res.json(await this.productModel.searchByMarca({ marca: String(marca).trim(), q: query, limit: lim, offset: off }))
+        }
+        return res.json(await this.productModel.searchAll({ q: query, limit: lim, offset: off }))
+      }
+
+      // ✅ comportamiento actual intacto
       if (categoryParentId) {
-        return res.json(await this.productModel.getByCategoryGrandchildrenOf({ parentId: String(categoryParentId).trim(), marca, limit: lim, offset: off }))
+        return res.json(await this.productModel.getByCategoryParentId({ parentId: String(categoryParentId).trim(), marca, limit: lim, offset: off }))
       }
 
       if (categoryChildOf) {
-        return res.json(await this.productModel.getByCategoryChildrenOf({ parentId: String(categoryChildOf).trim(), marca, limit: lim, offset: off }))
+        return res.json(await this.productModel.getByCategoryChildOf({ parentId: String(categoryChildOf).trim(), marca, limit: lim, offset: off }))
       }
 
       if (categoryId) {
