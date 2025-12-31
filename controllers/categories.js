@@ -1,3 +1,5 @@
+import { mapCategories } from '../utils/cdn.js'
+
 export class CategoryController {
   constructor ({ categoryModel }) {
     this.categoryModel = categoryModel
@@ -19,18 +21,18 @@ export class CategoryController {
         const categories = await this.categoryModel.getByParentId({
           parentId: String(parentId).trim()
         })
-        return res.json(categories)
+        return res.json(mapCategories(categories))
       }
 
       if (hasGrandchildren) {
         const categories = await this.categoryModel.getGrandchildrenByParentId({
           parentId: String(grandchildrenOf).trim()
         })
-        return res.json(categories)
+        return res.json(mapCategories(categories))
       }
 
       const categories = await this.categoryModel.getAll()
-      return res.json(categories)
+      return res.json(mapCategories(categories))
     } catch (e) {
       return res.status(500).json({ message: 'Error fetching categories' })
     }
@@ -39,7 +41,7 @@ export class CategoryController {
   getRoots = async (_req, res) => {
     try {
       const categories = await this.categoryModel.getRoots()
-      return res.json(categories)
+      return res.json(mapCategories(categories))
     } catch (e) {
       return res.status(500).json({ message: 'Error fetching root categories' })
     }
@@ -48,7 +50,7 @@ export class CategoryController {
   getTree = async (_req, res) => {
     try {
       const categories = await this.categoryModel.getAll()
-      return res.json(buildCategoryTree(categories))
+      return res.json(buildCategoryTree(mapCategories(categories)))
     } catch (e) {
       return res.status(500).json({ message: 'Error building category tree' })
     }

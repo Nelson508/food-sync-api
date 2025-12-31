@@ -29,7 +29,7 @@ async function executeQuery (query, params = []) {
 export class CategoryModel {
   static async getAll () {
     const query = `
-      SELECT id, nombre, parent_id
+      SELECT id, nombre, parent_id, image_key
       FROM categorias
       order by id ASC;
     `
@@ -40,7 +40,7 @@ export class CategoryModel {
 
   static async getRoots () {
     const query = `
-      SELECT id, nombre
+      SELECT id, nombre, image_key
       FROM categorias
       WHERE parent_id IS NULL
       ORDER BY id ASC;
@@ -52,7 +52,7 @@ export class CategoryModel {
 
   static async getByParentId ({ parentId }) {
     const query = `
-      SELECT id, nombre, parent_id
+      SELECT id, nombre, parent_id, image_key
       FROM categorias
       WHERE parent_id = $1;
     `
@@ -63,7 +63,7 @@ export class CategoryModel {
 
   static async getGrandchildrenByParentId ({ parentId }) {
     const query = `
-      SELECT g.id, g.nombre, g.parent_id
+      SELECT g.id, g.nombre, g.parent_id, g.image_key
       FROM categorias AS c
       JOIN categorias AS g ON g.parent_id = c.id
       WHERE c.parent_id = $1
