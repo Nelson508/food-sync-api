@@ -7,7 +7,7 @@ export class ProductController {
 
   getProducts = async (req, res) => {
     try {
-      const { categoryId, categoryChildOf, categoryParentId, marca, q, limit, offset } = req.query
+      const { categoryId, categoryChildOf, categoryParentId, marca, q, barcode, limit, offset } = req.query
 
       const used = [categoryId, categoryChildOf, categoryParentId]
         .filter(v => v !== undefined && String(v).trim() !== '').length
@@ -52,6 +52,10 @@ export class ProductController {
 
       if (marca) {
         return res.json(await this.productModel.getByMarca({ marca: String(marca).trim(), limit: lim, offset: off }))
+      }
+
+      if (barcode) {
+        return res.json(await this.productModel.getByBarcode({ barcode: String(barcode).trim(), limit: lim, offset: off }))
       }
 
       return res.json(await this.productModel.getAll({ limit: lim, offset: off }))

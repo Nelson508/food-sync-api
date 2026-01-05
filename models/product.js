@@ -136,6 +136,28 @@ export class ProductModel {
     return result.records
   }
 
+  static async getByBarcode ({ barcode, limit, offset }) {
+    const query = `
+      SELECT
+        id,
+        nombre,
+        codigo_barra,
+        imagen_url,
+        detalle_nutricional,
+        categoria_id,
+        marca,
+        url_producto
+      FROM productos
+      WHERE codigo_barra = $1
+      ORDER BY nombre
+      LIMIT $2 OFFSET $3;
+    `
+    const result = await executeQuery(query, [barcode, limit, offset])
+
+    if (result.records.length === 0) return null
+    return result.records
+  }
+
   static async searchAll ({ q, limit, offset }) {
     const query = `
       SELECT
