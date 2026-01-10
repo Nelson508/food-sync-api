@@ -13,7 +13,7 @@ export const pool = new Pool({
   ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : undefined
 })
 
-export async function query (text, params = []) {
+export async function executeQuery (text, params = []) {
   const res = await pool.query(text, params)
   return res.rows
 }
