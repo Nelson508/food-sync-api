@@ -23,16 +23,16 @@ export class ProductController {
       // ✅ Si hay query, usa búsqueda dentro del scope que corresponda
       if (query) {
         if (categoryParentId) {
-          return res.json(await this.productModel.searchByCategoryParentId({ parentId: String(categoryParentId).trim(), marca, q: query, limit: lim, offset: off }))
+          return res.json(await this.productModel.searchByCategoryParentId({ parentId: String(categoryParentId).trim(), q: query, marca, limit: lim, offset: off }))
         }
         if (categoryChildOf) {
-          return res.json(await this.productModel.searchByCategoryChildOf({ parentId: String(categoryChildOf).trim(), marca, q: query, limit: lim, offset: off }))
+          return res.json(await this.productModel.searchByCategoryChildOf({ parentId: String(categoryChildOf).trim(), q: query, marca, limit: lim, offset: off }))
         }
         if (categoryId) {
-          return res.json(await this.productModel.searchByCategoryId({ categoryId: String(categoryId).trim(), marca, q: query, limit: lim, offset: off }))
+          return res.json(await this.productModel.searchByCategoryId({ categoryId: String(categoryId).trim(), q: query, marca, limit: lim, offset: off }))
         }
         if (marca) {
-          return res.json(await this.productModel.searchByMarca({ marca: String(marca).trim(), q: query, limit: lim, offset: off }))
+          return res.json(await this.productModel.searchByMarca({ q: query, marca: String(marca).trim(), limit: lim, offset: off }))
         }
         return res.json(await this.productModel.searchAll({ q: query, limit: lim, offset: off }))
       }

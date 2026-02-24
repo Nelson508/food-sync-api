@@ -1,4 +1,4 @@
-import { executeQuery } from '../config/db.js'
+import { executeQuery } from '../../config/db.js'
 
 export class SupermarketModel {
   static async getAll () {

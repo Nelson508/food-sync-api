@@ -1,4 +1,4 @@
-import { query } from '../../config/db.js'
+import { executeQuery } from '../../config/db.js'
 
 export class CategoryModel {
   static async getAll () {
@@ -7,7 +7,7 @@ export class CategoryModel {
       FROM categorias
       ORDER BY id ASC;
     `
-    return await query(sql)
+    return await executeQuery(sql)
   }
 
   static async getRoots () {
@@ -17,7 +17,7 @@ export class CategoryModel {
       WHERE parent_id IS NULL
       ORDER BY id ASC;
     `
-    return await query(sql)
+    return await executeQuery(sql)
   }
 
   static async getByParentId ({ parentId }) {
@@ -27,7 +27,7 @@ export class CategoryModel {
       WHERE parent_id = $1
       ORDER BY id ASC;
     `
-    return await query(sql, [parentId])
+    return await executeQuery(sql, [parentId])
   }
 
   static async getGrandchildrenByParentId ({ parentId }) {
@@ -38,6 +38,6 @@ export class CategoryModel {
       WHERE c.parent_id = $1
       ORDER BY g.id ASC;
     `
-    return await query(sql, [parentId])
+    return await executeQuery(sql, [parentId])
   }
 }
