@@ -3,12 +3,12 @@ import { createProductRouter } from './routes/products.js'
 import { createSupermarketRouter } from './routes/supermarkets.js'
 import { createCategoryRouter } from './routes/categories.js'
 
-export const creatApp = ({ productModel, supermarketModel, categoryModel }) => {
+export const creatApp = ({ productModel, supermarketModel, categoryModel, ingredientModel }) => {
   const app = express()
   app.use(json())
   app.disable('x-powered-by') // deshabilitar el header X-Powered-By: Express
 
-  app.use('/products', createProductRouter({ productModel }))
+  app.use('/products', createProductRouter({ productModel, ingredientModel }))
   app.use('/supermarkets', createSupermarketRouter({ supermarketModel }))
   app.use('/categories', createCategoryRouter({ categoryModel }))
 
