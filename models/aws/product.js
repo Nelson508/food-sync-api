@@ -11,9 +11,12 @@ export class ProductModel {
         p.detalle_nutricional,
         p.categoria_id,
         p.marca,
-        pf.url_producto
+        pf.url_producto,
+        c.nombre AS categoria_nombre,
+        c.image_key AS categoria_image_key
       FROM productos p
       LEFT JOIN producto_fuente pf ON pf.producto_id  = p.id
+      LEFT JOIN categorias c ON c.id = p.categoria_id
       WHERE p.activo = true
       ORDER BY p.nombre
       LIMIT $1 OFFSET $2;
@@ -32,9 +35,12 @@ export class ProductModel {
         p.detalle_nutricional,
         p.categoria_id,
         p.marca,
-        pf.url_producto
+        pf.url_producto,
+        c.nombre AS categoria_nombre,
+        c.image_key AS categoria_image_key
       FROM productos p
-      LEFT JOIN producto_fuente pf ON pf.producto_id  = p.id
+      LEFT JOIN producto_fuente pf ON pf.producto_id = p.id
+      LEFT JOIN categorias c ON c.id = p.categoria_id
       WHERE p.categoria_id = $1 AND p.activo = true  
       ORDER BY p.id
       LIMIT $2 OFFSET $3;
@@ -52,7 +58,9 @@ export class ProductModel {
         p.detalle_nutricional,
         p.categoria_id,
         p.marca,
-        pf.url_producto
+        pf.url_producto,
+        c.nombre AS categoria_nombre,
+        c.image_key AS categoria_image_key
       FROM categorias AS c
       JOIN productos  AS p ON p.categoria_id = c.id
       LEFT JOIN producto_fuente pf ON pf.producto_id = p.id
@@ -73,7 +81,9 @@ export class ProductModel {
         p.detalle_nutricional,
         p.categoria_id,
         p.marca,
-        pf.url_producto
+        pf.url_producto,
+        g.nombre AS categoria_nombre,
+        g.image_key AS categoria_image_key
       FROM categorias AS c
       JOIN categorias AS g ON g.parent_id = c.id
       JOIN productos  AS p ON p.categoria_id = g.id
@@ -95,9 +105,12 @@ export class ProductModel {
         p.detalle_nutricional,
         p.categoria_id,
         p.marca,
-        pf.url_producto
+        pf.url_producto,
+        c.nombre AS categoria_nombre,
+        c.image_key AS categoria_image_key
       FROM productos AS p
-      LEFT JOIN producto_fuente pf ON pf.producto_id  = p.id
+      LEFT JOIN producto_fuente pf ON pf.producto_id = p.id
+      LEFT JOIN categorias c ON c.id = p.categoria_id
       WHERE LOWER(p.marca) = LOWER($1) AND p.activo = true
       ORDER BY p.nombre
       LIMIT $2 OFFSET $3;
@@ -116,9 +129,12 @@ export class ProductModel {
         p.detalle_nutricional,
         p.categoria_id,
         p.marca,
-        pf.url_producto
+        pf.url_producto,
+        c.nombre AS categoria_nombre,
+        c.image_key AS categoria_image_key
       FROM productos AS p
       LEFT JOIN producto_fuente pf ON pf.producto_id = p.id
+      LEFT JOIN categorias c ON c.id = p.categoria_id
       WHERE ltrim(trim(p.codigo_barra), '0') = ltrim(trim($1::text), '0')
       AND p.activo = true
       ORDER BY p.nombre
@@ -138,9 +154,12 @@ export class ProductModel {
         p.detalle_nutricional,
         p.categoria_id,
         p.marca,
-        pf.url_producto
+        pf.url_producto,
+        c.nombre AS categoria_nombre,
+        c.image_key AS categoria_image_key
       FROM productos AS p
-      LEFT JOIN producto_fuente pf ON pf.producto_id  = p.id
+      LEFT JOIN producto_fuente pf ON pf.producto_id = p.id
+      LEFT JOIN categorias c ON c.id = p.categoria_id
       WHERE translate(lower(p.nombre),
         'áéíóúàèìòùäëïöüâêîôûñ',
         'aeiouaeiouaeiouaeioun'
@@ -167,10 +186,13 @@ export class ProductModel {
         p.detalle_nutricional,
         p.categoria_id,
         p.marca,
-        pf.url_producto
+        pf.url_producto,
+        c.nombre AS categoria_nombre,
+        c.image_key AS categoria_image_key
       FROM productos AS p
       LEFT JOIN producto_fuente pf
       ON pf.producto_id  = p.id
+      LEFT JOIN categorias c ON c.id = p.categoria_id
       WHERE p.categoria_id = $1
       AND p.activo = true
       AND translate(lower(p.nombre),
@@ -204,7 +226,9 @@ export class ProductModel {
         p.detalle_nutricional,
         p.categoria_id,
         p.marca,
-        pf.url_producto
+        pf.url_producto,
+        c.nombre AS categoria_nombre,
+        c.image_key AS categoria_image_key
       FROM categorias AS c
       JOIN productos  AS p ON p.categoria_id = c.id
       LEFT JOIN producto_fuente pf ON pf.producto_id = p.id
@@ -241,7 +265,9 @@ export class ProductModel {
         p.detalle_nutricional,
         p.categoria_id,
         p.marca,
-        pf.url_producto
+        pf.url_producto,
+        g.nombre AS categoria_nombre,
+        g.image_key AS categoria_image_key
       FROM categorias AS c
       JOIN categorias AS g ON g.parent_id = c.id
       JOIN productos  AS p ON p.categoria_id = g.id
@@ -277,9 +303,12 @@ export class ProductModel {
         p.detalle_nutricional,
         p.categoria_id,
         p.marca,
-        pf.url_producto
+        pf.url_producto,
+        c.nombre AS categoria_nombre,
+        c.image_key AS categoria_image_key
       FROM productos AS p
-      LEFT JOIN producto_fuente pf ON pf.producto_id  = p.id
+      LEFT JOIN producto_fuente pf ON pf.producto_id = p.id
+      LEFT JOIN categorias c ON c.id = p.categoria_id
       WHERE translate(lower(p.nombre),
         'áéíóúàèìòùäëïöüâêîôûñ',
         'aeiouaeiouaeiouaeioun'

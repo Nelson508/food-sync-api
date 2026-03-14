@@ -10,14 +10,14 @@ function buildImageUrl (imageKey) {
   return `${CDN_BASE_URL}/${key}`
 }
 
-function mapCategory (category) {
-  const imageKey = category.image_key ?? category.imageKey ?? null
+function mapItem (item) {
+  const categoriaImageKey = item.image_key ?? item.categoria_image_key ?? null
   return {
-    ...category,
-    image_url: buildImageUrl(imageKey)
+    ...item,
+    cat_image_url: buildImageUrl(categoriaImageKey)
   }
 }
 
-export function mapCategories (list) {
-  return Array.isArray(list) ? list.map(mapCategory) : []
+export function mapItems (list) {
+  return Array.isArray(list) ? list.map(mapItem) : []
 }

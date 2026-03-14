@@ -1,4 +1,5 @@
 import { validateProduct, validatePartialProduct } from '../schemas/products.js'
+import { mapItems } from '../utils/cdn.js'
 
 export class ProductController {
   constructor ({ productModel }) {
@@ -23,42 +24,53 @@ export class ProductController {
       // ✅ Si hay query, usa búsqueda dentro del scope que corresponda
       if (query) {
         if (categoryParentId) {
-          return res.json(await this.productModel.searchByCategoryParentId({ parentId: String(categoryParentId).trim(), q: query, marca, limit: lim, offset: off }))
+          const products = await this.productModel.searchByCategoryParentId({ parentId: String(categoryParentId).trim(), q: query, marca, limit: lim, offset: off })
+          return res.json(mapItems(products))
         }
         if (categoryChildOf) {
-          return res.json(await this.productModel.searchByCategoryChildOf({ parentId: String(categoryChildOf).trim(), q: query, marca, limit: lim, offset: off }))
+          const products = await this.productModel.searchByCategoryChildOf({ parentId: String(categoryChildOf).trim(), q: query, marca, limit: lim, offset: off })
+          return res.json(mapItems(products))
         }
         if (categoryId) {
-          return res.json(await this.productModel.searchByCategoryId({ categoryId: String(categoryId).trim(), q: query, marca, limit: lim, offset: off }))
+          const products = await this.productModel.searchByCategoryId({ categoryId: String(categoryId).trim(), q: query, marca, limit: lim, offset: off })
+          return res.json(mapItems(products))
         }
         if (marca) {
-          return res.json(await this.productModel.searchByMarca({ q: query, marca: String(marca).trim(), limit: lim, offset: off }))
+          const products = await this.productModel.searchByMarca({ q: query, marca: String(marca).trim(), limit: lim, offset: off })
+          return res.json(mapItems(products))
         }
-        return res.json(await this.productModel.searchAll({ q: query, limit: lim, offset: off }))
+        const products = await this.productModel.searchAll({ q: query, limit: lim, offset: off })
+        return res.json(mapItems(products))
       }
 
       // ✅ comportamiento actual intacto
       if (categoryParentId) {
-        return res.json(await this.productModel.getByCategoryParentId({ parentId: String(categoryParentId).trim(), marca, limit: lim, offset: off }))
+        const products = await this.productModel.getByCategoryParentId({ parentId: String(categoryParentId).trim(), marca, limit: lim, offset: off })
+        return res.json(mapItems(products))
       }
 
       if (categoryChildOf) {
-        return res.json(await this.productModel.getByCategoryChildOf({ parentId: String(categoryChildOf).trim(), marca, limit: lim, offset: off }))
+        const products = await this.productModel.getByCategoryChildOf({ parentId: String(categoryChildOf).trim(), marca, limit: lim, offset: off })
+        return res.json(mapItems(products))
       }
 
       if (categoryId) {
-        return res.json(await this.productModel.getByCategoryId({ categoryId: String(categoryId).trim(), marca, limit: lim, offset: off }))
+        const products = await this.productModel.getByCategoryId({ categoryId: String(categoryId).trim(), marca, limit: lim, offset: off })
+        return res.json(mapItems(products))
       }
 
       if (marca) {
-        return res.json(await this.productModel.getByMarca({ marca: String(marca).trim(), limit: lim, offset: off }))
+        const products = await this.productModel.getByMarca({ marca: String(marca).trim(), limit: lim, offset: off })
+        return res.json(mapItems(products))
       }
 
       if (barcode) {
-        return res.json(await this.productModel.getByBarcode({ barcode: String(barcode).trim(), limit: lim, offset: off }))
+        const products = await this.productModel.getByBarcode({ barcode: String(barcode).trim(), limit: lim, offset: off })
+        return res.json(mapItems(products))
       }
 
-      return res.json(await this.productModel.getAll({ limit: lim, offset: off }))
+      const products = await this.productModel.getAll({ limit: lim, offset: off })
+      return res.json(mapItems(products))
     } catch (e) {
       return res.status(500).json({ message: 'Error fetching products' })
     }

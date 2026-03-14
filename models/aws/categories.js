@@ -5,6 +5,7 @@ export class CategoryModel {
     const sql = `
       SELECT id, nombre, parent_id, image_key
       FROM categorias
+      WHERE id <> 0
       ORDER BY id ASC;
     `
     return await executeQuery(sql)
@@ -15,6 +16,7 @@ export class CategoryModel {
       SELECT id, nombre, image_key
       FROM categorias
       WHERE parent_id IS NULL
+      AND id <> 0
       ORDER BY id ASC;
     `
     return await executeQuery(sql)
